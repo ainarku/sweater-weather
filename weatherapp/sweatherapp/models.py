@@ -1,13 +1,18 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.conf import settings
+
 
 class WeatherData(models.Model):
-    city_name = models.CharField(max_length=255, blank=False, null=False)
-    temperature = models.FloatField(blank=False, null=False)
-    temperature_fahrenheit = models.FloatField(blank=False, null=False)
-    feels_like = models.FloatField(blank=False, null=True)
-    weather_description = models.CharField(max_length=255, blank=False, null=False)
+    city_name = models.CharField(max_length=255, blank=False, null=False, default="Tallinn")
+    temperature = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
+    temperature_fahrenheit = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False, default=0.0)
+    feels_like = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=True)
+    weather_description = models.CharField(max_length=255, blank=False, null=False, default="No description")
     humidity = models.IntegerField(blank=False, null=False)
+
+    class Meta:
+        ordering = ["city_name"]
 
     def __str__(self):
         return (f"Weather in {self.city_name}: {self.temperature}°C - "
@@ -19,16 +24,17 @@ class News(models.Model):
     content = models.TextField(blank=False, null=False)
     image = models.ImageField(blank=True, null=True)
 
+    class Meta:
+        ordering = ["-id"]
+
     def __str__(self):
         return self.title
-
-        return self.city_name
 
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The Email field must be set')
+            raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
@@ -36,8 +42,8 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
         return self.create_user(username, email, password, **extra_fields)
 
@@ -54,8 +60,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
         return self.username
+
+
+class FavouriteCity(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    city_name = models.CharField(max_length=100)
+    weather_data = models.OneToOneField(WeatherData, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("user", "city_name")
+
+    def __str__(self):
+        return f"{self.user.username}'s favorite city: {self.city_name}"
