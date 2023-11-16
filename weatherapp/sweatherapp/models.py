@@ -96,7 +96,7 @@ class News(models.Model):
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
-            raise ValueError("The Email field must be set")
+            raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
@@ -104,8 +104,8 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(username, email, password, **extra_fields)
 
@@ -122,20 +122,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.username
-
-
-class FavouriteCity(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    city_name = models.CharField(max_length=100)
-    weather_data = models.OneToOneField(WeatherData, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ("user", "city_name")
-
-    def __str__(self):
-        return f"{self.user.username}'s favorite city: {self.city_name}"
