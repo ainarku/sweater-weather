@@ -62,3 +62,20 @@ def fetch_weather_data(request):
             return HttpResponse("Weather Data")
 
     return HttpResponse("User's city not provided")
+
+
+#   else:
+#     return render(request, 'weatherapp/index.html')
+
+def home(request):
+    return render(request, 'home.html')
+
+
+def search_weather(request):
+    if request.method == 'POST':
+        city = request.POST.get('city')
+        # Perform the weather search or any other processing here
+        # You can use the 'city' variable to get the user input
+
+        # For demonstration purposes, let's pass the city to the template
+        return render(request, 'weather_result.html', {'city': city})
