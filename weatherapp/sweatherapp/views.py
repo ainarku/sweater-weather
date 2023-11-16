@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import WeatherData
+from .models import WeatherData, UserPreference
+from .utils import kelvin_to_celsius, kelvin_to_fahrenheit, humidity_to_percentage
 import requests
 import json
 import os
@@ -10,8 +11,9 @@ load_dotenv()
 
 
 def fetch_weather_data(request):
-    city = 'Tallinn'
-    if city:
+    user_city = 'Tallinn'
+
+    if user_city:
         api_key = os.getenv("OPENWEATHERMAP_API_KEY")
         if not api_key:
             return render(
@@ -20,26 +22,46 @@ def fetch_weather_data(request):
                 {'error_message': 'API key is missing.'}
             )
 
-        url = ('https://api.openweathermap.org/data'
-               f'/2.5/weather?q={city}&appid={api_key}')
+        url = f'https://api.openweathermap.org/data/2.5/weather?q={user_city}&appid={api_key}'
         response = requests.get(url)
 
         if response.status_code == 200:
             data = json.loads(response.text)
-            weather_data = WeatherData()
+
+            if request.user is not None and request.user.is_authenticated:
+                user_preference, created = UserPreference.objects.get_or_create(
+                    user=request.user, defaults={'temperature_unit': 'C'}
+                )
+                weather_data = WeatherData(user_preference=user_preference)
+            else:
+                return HttpResponse("User not authenticated")
+
             weather_data.city_name = data.get('name')
-            weather_data.temperature = data['main']['temp'] - 273.15
-            weather_data.temperature_fahrenheit = (data['main']['temp'] - 273.15) * 9 / 5 + 32
-            weather_data.feels_like = data['main']['feels_like'] - 273.15
-            weather_data.weather_description = data.get('weather')[0].get('description')
-            weather_data.humidity = data.get('main').get('humidity')
+
+            if user_preference.temperature_unit == 'C':
+                weather_data.temperature = kelvin_to_celsius(data.get('main', {}).get('temp', 0))
+                weather_data.feels_like = kelvin_to_celsius(data.get('main', {}).get('feels_like', 0))
+                weather_data.temperature_fahrenheit = kelvin_to_fahrenheit(data.get('main', {}).get('temp', 0))
+            else:
+                weather_data.temperature = kelvin_to_fahrenheit(data.get('main', {}).get('temp', 0))
+                weather_data.feels_like = kelvin_to_fahrenheit(data.get('main', {}).get('feels_like', 0))
+                weather_data.temperature_fahrenheit = data.get('main', {}).get('temp', 0)
+
+            weather_data.weather_description = data.get('weather', [{}])[0].get('description', 'No Description')
+
+            humidity_percentage = humidity_to_percentage(data.get('main', {}).get('humidity', 0))
+            weather_data.humidity = humidity_percentage
+
             weather_data.save()
 
             context = {
                 'weather_data': weather_data,
+                'user_preference': user_preference,
             }
+
             return HttpResponse("Weather Data")
 
+    return HttpResponse("User's city not provided")
 
 #   else:
 #     return render(request, 'weatherapp/index.html')
