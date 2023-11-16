@@ -16,36 +16,48 @@ class UserPreference(models.Model):
 
 
 class WeatherData(models.Model):
-    city_name = models.CharField(max_length=255,
-                                 blank=False,
-                                 null=False
-                                 )
-    temperature = models.DecimalField(max_digits=5,
-                                      decimal_places=2,
-                                      blank=False,
-                                      null=False
-                                      )
-    temperature_fahrenheit = models.DecimalField(max_digits=5,
-                                                 decimal_places=2,
-                                                 blank=False,
-                                                 null=False
-                                                 )
-    feels_like = models.DecimalField(max_digits=5,
-                                     decimal_places=2,
-                                     blank=False,
-                                     null=True
-                                     )
-    weather_description = models.CharField(max_length=255,
-                                           blank=False,
-                                           null=False)
-    humidity = models.IntegerField(blank=False,
-                                   null=False
-                                   )
-    user_preference = models.ForeignKey(UserPreference,
-                                        on_delete=models.SET_NULL,
-                                        null=True,
-                                        blank=True
-                                        )
+    city_name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    temperature = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=False
+    )
+    temperature_fahrenheit = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=False
+    )
+    feels_like = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=True
+    )
+    weather_description = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    humidity = models.CharField(
+        max_length=5,
+        blank=False,
+        null=False
+    )
+    user_preference = models.ForeignKey(
+        UserPreference,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        ordering = ["city_name"]
 
     def __str__(self):
         return (
@@ -55,11 +67,27 @@ class WeatherData(models.Model):
             f"{self.weather_description}"
         )
 
+    def humidity_percentage(self):
+        return f"{self.humidity}%"
+
 
 class News(models.Model):
-    title = models.CharField(max_length=255, blank=False, null=False)
-    content = models.TextField(blank=False, null=False)
-    image = models.ImageField(blank=True, null=True)
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    content = models.TextField(
+        blank=False,
+        null=False
+    )
+    image = models.ImageField(
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        ordering = ["-id"]
 
     def __str__(self):
         return self.title

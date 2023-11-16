@@ -11,3 +11,9 @@ def kelvin_to_celsius(kelvin):
 # Conversion from Kelvin to Fahrenheit
 def kelvin_to_fahrenheit(kelvin):
     return kelvin * 9 / 5 - 459.67
+
+
+# Humidity as Percentage %
+
+def humidity_to_percentage(humidity):
+    return f"{humidity}%"
