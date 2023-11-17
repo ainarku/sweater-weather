@@ -1,28 +1,95 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, User
 from django.db import models
 from django.conf import settings
 
 
+class UserPreference(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    temperature_unit = models.CharField(
+        max_length=1,
+        choices=[('C', 'Celsius'), ('F', 'Fahrenheit')],
+        default=settings.DEFAULT_TEMPERATURE_UNIT
+    )
+
+    def __str__(self):
+        return f"{self.user.username}'s Preference: {self.temperature_unit}"
+
+
 class WeatherData(models.Model):
-    city_name = models.CharField(max_length=255, blank=False, null=False, default="Tallinn")
-    temperature = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False)
-    temperature_fahrenheit = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=False, default=0.0)
-    feels_like = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=True)
-    weather_description = models.CharField(max_length=255, blank=False, null=False, default="No description")
-    humidity = models.IntegerField(blank=False, null=False)
+    city_name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    temperature = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        default=0.0
+    )
+    temperature_fahrenheit = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        default=0.0
+    )
+    feels_like = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=True
+    )
+    weather_description = models.TextField(
+        max_length=255,
+        blank=False,
+        null=False,
+        default="No Description"
+    )
+    humidity = models.CharField(
+        max_length=5,
+        blank=False,
+        null=False)
+    user_preference = models.ForeignKey(
+        UserPreference,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     class Meta:
         ordering = ["city_name"]
 
     def __str__(self):
-        return (f"Weather in {self.city_name}: {self.temperature}°C - "
-                f"{self.temperature_fahrenheit}°F - {self.weather_description}")
+        return (
+            f"Weather in {self.city_name}: "
+            f"{self.temperature}°C - "
+            f"{self.temperature_fahrenheit}°F - "
+            f"{self.weather_description}"
+        )
+
+    def humidity_percentage(self):
+        return f"{self.humidity}%"
 
 
 class News(models.Model):
-    title = models.CharField(max_length=255, blank=False, null=False)
-    content = models.TextField(blank=False, null=False)
-    image = models.ImageField(blank=True, null=True)
+    title = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    content = models.TextField(
+        blank=False,
+        null=False
+    )
+    image = models.ImageField(
+        blank=True,
+        null=True
+    )
 
     class Meta:
         ordering = ["-id"]
