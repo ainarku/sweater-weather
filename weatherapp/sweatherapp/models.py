@@ -73,7 +73,63 @@ class WeatherData(models.Model):
         )
 
     def humidity_percentage(self):
-        return f"{self.humidity}%"
+        return f"{self.humidity} %"
+
+
+class ForecastData(models.Model):
+    city_name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+    date_time = models.DateTimeField()
+    temperature = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        default=0.0
+    )
+
+    temperature_fahrenheit = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        default=0.0
+    )
+    feels_like = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=False,
+        null=True
+    )
+    weather_description = models.TextField(
+        max_length=255,
+        blank=False,
+        null=False,
+        default="No Description"
+    )
+    humidity = models.CharField(
+        max_length=5,
+        blank=False,
+        null=False
+    )
+    user_preference = models.ForeignKey(
+        UserPreference,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        ordering = ['date_time']
+
+    def __str__(self):
+        return f"Forecast for {self.city_name} on {self.date_time}"
+
+    def humidity_percentage(self):
+        return f"{self.humidity} %"
 
 
 class News(models.Model):

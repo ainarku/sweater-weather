@@ -1,19 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import WeatherData, UserPreference
+from .models import WeatherData, UserPreference, ForecastData
 from .utils import kelvin_to_celsius, kelvin_to_fahrenheit, humidity_to_percentage
 import requests
 import json
 import os
+from datetime import datetime
+from django.utils import timezone
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 def fetch_weather_data(request):
-    user_city = 'Tallinn'
+    city = 'Tallinn'
 
-    if user_city:
+    if city:
         api_key = os.getenv("OPENWEATHERMAP_API_KEY")
         if not api_key:
             return render(
@@ -22,50 +24,71 @@ def fetch_weather_data(request):
                 {'error_message': 'API key is missing.'}
             )
 
-        url = f'https://api.openweathermap.org/data/2.5/weather?q={user_city}&appid={api_key}'
-        response = requests.get(url)
+        # Fetch current weather data
+        current_url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}'
+        current_response = requests.get(current_url)
 
-        if response.status_code == 200:
-            data = json.loads(response.text)
+        if current_response.status_code == 200:
+            current_data = json.loads(current_response.text)
 
-            if request.user is not None and request.user.is_authenticated:
+            # Fetch forecast data
+            forecast_url = f'https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}'
+            forecast_response = requests.get(forecast_url)
+
+            if forecast_response.status_code == 200:
+                forecast_data = json.loads(forecast_response.text)
+
+                # Save current weather data
                 user_preference, created = UserPreference.objects.get_or_create(
                     user=request.user, defaults={'temperature_unit': 'C'}
                 )
                 weather_data = WeatherData(user_preference=user_preference)
-            else:
-                return HttpResponse("User not authenticated")
+                weather_data.city_name = current_data.get('name')
 
-            weather_data.city_name = data.get('name')
+                if user_preference.temperature_unit == 'C':
+                    weather_data.temperature = kelvin_to_celsius(current_data.get('main', {}).get('temp', 0))
+                    weather_data.feels_like = kelvin_to_celsius(current_data.get('main', {}).get('feels_like', 0))
+                    weather_data.temperature_fahrenheit = kelvin_to_fahrenheit(
+                        current_data.get('main', {}).get('temp', 0))
+                else:
+                    weather_data.temperature = kelvin_to_fahrenheit(current_data.get('main', {}).get('temp', 0))
+                    weather_data.feels_like = kelvin_to_fahrenheit(current_data.get('main', {}).get('feels_like', 0))
+                    weather_data.temperature_fahrenheit = current_data.get('main', {}).get('temp', 0)
 
-            if user_preference.temperature_unit == 'C':
-                weather_data.temperature = kelvin_to_celsius(data.get('main', {}).get('temp', 0))
-                weather_data.feels_like = kelvin_to_celsius(data.get('main', {}).get('feels_like', 0))
-                weather_data.temperature_fahrenheit = kelvin_to_fahrenheit(data.get('main', {}).get('temp', 0))
-            else:
-                weather_data.temperature = kelvin_to_fahrenheit(data.get('main', {}).get('temp', 0))
-                weather_data.feels_like = kelvin_to_fahrenheit(data.get('main', {}).get('feels_like', 0))
-                weather_data.temperature_fahrenheit = data.get('main', {}).get('temp', 0)
+                weather_data.weather_description = current_data.get('weather', [{}])[0].get('description',
+                                                                                            'No Description')
+                humidity_percentage = humidity_to_percentage(current_data.get('main', {}).get('humidity', 0))
+                weather_data.humidity = humidity_percentage
+                weather_data.save()
 
-            weather_data.weather_description = data.get('weather', [{}])[0].get('description', 'No Description')
+                # Save forecast data
+                for forecast in forecast_data.get('list', []):
+                    forecast_datetime = datetime.fromtimestamp(forecast.get('dt', 0))
+                    forecast_datetime_aware = timezone.make_aware(forecast_datetime, timezone=timezone.utc)
 
-            humidity_percentage = humidity_to_percentage(data.get('main', {}).get('humidity', 0))
-            weather_data.humidity = humidity_percentage
+                    main_data = forecast.get('main', {})
 
-            weather_data.save()
+                    if main_data:
+                        forecast_instance = ForecastData(
+                            city_name=forecast_data.get('city', {}).get('name'),
+                            date_time=forecast_datetime_aware,
+                            temperature=kelvin_to_celsius(main_data.get('temp', 0)),
+                            temperature_fahrenheit=kelvin_to_fahrenheit(main_data.get('temp', 0)),
+                            feels_like=kelvin_to_celsius(main_data.get('feels_like', 0)),
+                            weather_description=forecast.get('weather', [{}])[0].get('description', 'No Description'),
+                            humidity=humidity_to_percentage(main_data.get('humidity', 0)),
+                            user_preference=user_preference,
+                        )
+                        forecast_instance.save()
+                context = {
+                    'weather_data': weather_data,
+                    'user_preference': user_preference,
+                }
 
-            context = {
-                'weather_data': weather_data,
-                'user_preference': user_preference,
-            }
-
-            return HttpResponse("Weather Data")
+                return HttpResponse("Weather Data and Forecast Data saved successfully")
 
     return HttpResponse("User's city not provided")
 
-
-#   else:
-#     return render(request, 'weatherapp/index.html')
 
 def home(request):
     return render(request, 'home.html')
