@@ -29,5 +29,28 @@
         </div>
     </div>
 </body>
+<body>
+    <h1>Welcome to Weather App</h1>
+
+    <!-- Weather Search Form  -->
+    <form id="weatherForm" method="post" action="{% url 'search_weather' %}">
+        {% csrf_token %}
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Search Weather</button>
+    </form>
+
+    <!-- Weather News Flow -->
+    <h2>Weather News</h2>
+    {% for news in weather_news %}
+        <div class="weather-news-item">
+            <h3>{{ news.title }}</h3>
+            <p>{{ news.content }}</p>
+            {% if news.image %}
+                <img src="{{ news.image.url }}" alt="{{ news.title }}">
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
 </html>
 

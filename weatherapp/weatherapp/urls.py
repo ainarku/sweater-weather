@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from sweatherapp.views import fetch_weather_data
+from sweatherapp.views import fetch_weather_data, home, search_weather
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', fetch_weather_data)
+    path('', fetch_weather_data),
+    path('', home, name='home'),
+    path('search_weather/', search_weather, name='search_weather'),
 ]
