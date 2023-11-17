@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import WeatherData, UserPreference, ForecastData
+from .models import WeatherData, UserPreference, ForecastData, WeatherNews
 from .utils import kelvin_to_celsius, kelvin_to_fahrenheit, humidity_to_percentage
 import requests
 import json
@@ -92,6 +92,8 @@ def fetch_weather_data(request):
 
 def home(request):
     return render(request, 'home.html')
+    weather_news = WeatherNews.objects.all()
+    return render(request, 'home.html', {'weather_news': weather_news})
 
 
 def search_weather(request):

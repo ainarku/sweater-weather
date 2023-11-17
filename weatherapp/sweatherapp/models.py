@@ -200,3 +200,12 @@ class FavouriteCity(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s favorite city: {self.city_name}"
+
+
+class WeatherNews(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    image = models.ImageField(upload_to='weather_news_images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.title
