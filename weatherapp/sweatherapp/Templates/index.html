@@ -1,53 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sweather-Weather</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweather-Weather</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Sweather-Weather</h1>
-    </div>
+  <header class="header">
+    <h1>Sweather-Weather</h1>
+  </header>
 
-    {% if weather_data %}
-        <div class="container">
-            <div class="weather-info">
-                <form method="post" action="{% url 'search_weather/' %}">
-                    <label for="city">Enter City:</label>
-                    <input type="text" id="city" name="city" required>
-                    <label for="units">Select Units:</label>
-                    <select id="units" name="units">
-                        <option value="metric">Celsius</option>
-                        <option value="imperial">Fahrenheit</option>
-                    </select>
-                    <button type="submit">Get Weather</button>
-                </form>
 
-                <h2>Current Weather</h2>
-                <p class="location">Location: {{ weather_data.city_name }}, {{ weather_data.sys.country }}</p>
-                <p class="temperature">Temperature: {{ weather_data.temperature }}°{{ user_preference.temperature_unit }}</p>
-                <p class="condition">Condition: {{ weather_data.weather_description }}</p>
-                <p class="humidity">Humidity: {{ weather_data.humidity }}%</p>
-            </div>
+    <main class="main-container">
+      <section class="weather-info">
+        <form method="post" action="{% url 'search_weather/' %}">
+          <div class="form-group">
+            <label for="city">Enter City:</label>
+            <input type="text" id="city" name="city" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="units">Select Units:</label>
+            <select id="units" name="units" class="form-control">
+              <option value="metric">Celsius</option>
+              <option value="imperial">Fahrenheit</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Get Weather</button>
+        </form>
 
-            <div class="forecast">
-                <h2>5-Day Forecast</h2>
-                {% for forecast in weather_forecast %}
-                    <p>{{ forecast.date }} - {{ forecast.temperature_max }}°{{ user_preference.temperature_unit }}/{{ forecast.temperature_min }}°{{ user_preference.temperature_unit }} - {{ forecast.condition }}</p>
-                {% endfor %}
-            </div>
+        <div class="weather-details">
+          <h2>Current Weather</h2>
+          <p class="location">Location: {{ weather_data.city_name }}, {{ weather_data.sys.country }}</p>
+          <p class="temperature">Temperature: {{ weather_data.temperature }}°{{ user_preference.temperature_unit }}</p>
+          <p class="condition">Condition: {{ weather_data.weather_description }}</p>
+          <p class="humidity">Humidity: {{ weather_data.humidity }}%</p>
         </div>
-    {% else %}
-        <!-- Add a message or handle the case when weather_data is not available -->
-        <p>No weather data available.</p>
-    {% endif %}
+      </section>
 
-    <div class="weather_news">
-        <h2>Latest News</h2>
-        <!-- news content goes here -->
-    </div>
+      <section class="forecast">
+        <h2>5-Day Forecast</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Temperature</th>
+              <th>Condition</th>
+            </tr>
+          </thead>
+          <tbody>
+
+              <tr>
+                <td>{{ forecast.date }}</td>
+                <td>{{ forecast.temperature_max }}°{{ user_preference.temperature_unit }} - {{ forecast.temperature_min }}°{{ user_preference.temperature_unit }}</td>
+                <td>{{ forecast.condition }}</td>
+              </tr>
+
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+
+  <section class="weather_news">
+    <h2>Latest News</h2>
+    <p>here are the news ...</p>
+    </section>
 
 </body>
 </html>
