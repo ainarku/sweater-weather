@@ -14,7 +14,7 @@
     {% if weather_data %}
         <div class="container">
             <div class="weather-info">
-                <form method="post" action="{% url 'index' %}"> <! -- here goes actual form submission URL!!! -->
+                <form method="post" action="{% url 'search_weather/' %}">
                     <label for="city">Enter City:</label>
                     <input type="text" id="city" name="city" required>
                     <label for="units">Select Units:</label>
@@ -34,16 +34,17 @@
 
             <div class="forecast">
                 <h2>5-Day Forecast</h2>
-                <!-- Add forecast content here -->
-                {% comment %} For example: {% endcomment %}
                 {% for forecast in weather_forecast %}
                     <p>{{ forecast.date }} - {{ forecast.temperature_max }}°{{ user_preference.temperature_unit }}/{{ forecast.temperature_min }}°{{ user_preference.temperature_unit }} - {{ forecast.condition }}</p>
                 {% endfor %}
             </div>
         </div>
+    {% else %}
+        <!-- Add a message or handle the case when weather_data is not available -->
+        <p>No weather data available.</p>
     {% endif %}
 
-    <div class="news">
+    <div class="weather_news">
         <h2>Latest News</h2>
         <!-- news content goes here -->
     </div>
