@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweather-Weather</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Sweather-Weather</h1>
+    </div>
+
+    {% if weather_data %}
+        <div class="container">
+            <div class="weather-info">
+                <form method="post" action="{% url 'index' %}"> <! -- here goes actual form submission URL!!! -->
+                    <label for="city">Enter City:</label>
+                    <input type="text" id="city" name="city" required>
+                    <label for="units">Select Units:</label>
+                    <select id="units" name="units">
+                        <option value="metric">Celsius</option>
+                        <option value="imperial">Fahrenheit</option>
+                    </select>
+                    <button type="submit">Get Weather</button>
+                </form>
+
+                <h2>Current Weather</h2>
+                <p class="location">Location: {{ weather_data.city_name }}, {{ weather_data.sys.country }}</p>
+                <p class="temperature">Temperature: {{ weather_data.temperature }}°{{ user_preference.temperature_unit }}</p>
+                <p class="condition">Condition: {{ weather_data.weather_description }}</p>
+                <p class="humidity">Humidity: {{ weather_data.humidity }}%</p>
+            </div>
+
+            <div class="forecast">
+                <h2>5-Day Forecast</h2>
+                <!-- Add forecast content here -->
+                {% comment %} For example: {% endcomment %}
+                {% for forecast in weather_forecast %}
+                    <p>{{ forecast.date }} - {{ forecast.temperature_max }}°{{ user_preference.temperature_unit }}/{{ forecast.temperature_min }}°{{ user_preference.temperature_unit }} - {{ forecast.condition }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="news">
+        <h2>Latest News</h2>
+        <!-- news content goes here -->
+    </div>
+
+</body>
+</html>
