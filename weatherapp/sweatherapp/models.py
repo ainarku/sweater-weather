@@ -41,7 +41,7 @@ class WeatherData(models.Model):
     feels_like = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        blank=False,
+        blank=True,
         null=True
     )
     weather_description = models.TextField(
