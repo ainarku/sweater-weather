@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Weather Results</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+<h1>Current weather in {{ current_weather.city_name }}</h1>
+
+<p>Temperature: {{ current_weather.temperature|floatformat:0 }} °{{ temperature_unit }}</p>
+<p>Feels Like: {{ current_weather.feels_like|floatformat:0 }} °{{ temperature_unit }}</p>
+<p>Weather Description: {{ current_weather.weather_description }}</p>
+<p>Humidity: {{ current_weather.humidity }} %</p>
+
+{% if forecast_data %}
+    <h2>Forecast for the next 5 days</h2>
+    <ul>
+        {% for forecast in forecast_data %}
+            <li>
+                <strong>{{ forecast.date_time|date:"Y-m-d H:i:s" }}</strong>
+                <br>
+                Temperature: {{ forecast.temperature|floatformat:0 }} °{{ temperature_unit }}
+                <br>
+                Feels Like: {{ forecast.feels_like|floatformat:0 }} °{{ temperature_unit }}
+                <br>
+                Weather Description: {{ forecast.weather_description }}
+                <br>
+                Humidity: {{ forecast.humidity }} %
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
