@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from sweatherapp.views import process_weather_view, home, index
+from sweatherapp.views import process_weather_view, index
 
 urlpatterns = [
     path('admin/', admin.site.urls),

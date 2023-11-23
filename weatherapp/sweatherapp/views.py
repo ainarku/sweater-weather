@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import WeatherNews
 from .utils import kelvin_to_celsius, kelvin_to_fahrenheit
 import requests
 import json
@@ -113,14 +112,6 @@ def fetch_weather(request):
 
 def search_weather(request):
     return process_weather_view(request, 'weather_result.html')
-
-
-def home(request):
-    weather_news = WeatherNews.objects.all()
-    context = {
-        'weather_news': weather_news,
-    }
-    return render(request, 'home.html', context)
 
 
 def index(request):
