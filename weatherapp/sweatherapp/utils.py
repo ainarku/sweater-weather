@@ -31,12 +31,8 @@ def api_request(city, endpoint, temperature_unit):
 def process_weather_data(data, temperature_unit):
     main_data = data.get('main', {})
 
-    temperature = kelvin_to_celsius(main_data.get('temp', 0)) if temperature_unit == 'C' \
-        else kelvin_to_fahrenheit(
-        main_data.get('temp', 0))
-    feels_like = kelvin_to_celsius(main_data.get('feels_like', 0)) if temperature_unit == 'C' \
-        else kelvin_to_fahrenheit(
-        main_data.get('feels_like', 0))
+    temperature = convert_temperature(main_data.get('temp', 0), temperature_unit)
+    feels_like = convert_temperature(main_data.get('feels_like', 0), temperature_unit)
 
     return {
         'city_name': data.get('name'),
@@ -61,14 +57,8 @@ def process_forecast_data(data, temperature_unit):
         if main_data:
             forecast_instance = {
                 'date_time': forecast_datetime_aware,
-                'temperature': kelvin_to_celsius(
-                    main_data.get('temp', 0)) if temperature_unit == 'C' else
-                kelvin_to_fahrenheit(
-                    main_data.get('temp', 0)),
-                'feels_like': kelvin_to_celsius(
-                    main_data.get('feels_like', 0)) if temperature_unit == 'C'
-                else kelvin_to_fahrenheit(
-                    main_data.get('feels_like', 0)),
+                'temperature': convert_temperature(main_data.get('temp', 0), temperature_unit),
+                'feels_like': convert_temperature(main_data.get('feels_like', 0), temperature_unit),
                 'weather_description': forecast.get('weather', [{}])[0].get(
                     'description', 'No Description'),
                 'humidity': (main_data.get('humidity', 0)),
@@ -76,6 +66,13 @@ def process_forecast_data(data, temperature_unit):
             forecast_list.append(forecast_instance)
 
     return forecast_list
+
+
+def convert_temperature(kelvin, target_unit):
+    celsius = kelvin_to_celsius(kelvin)
+    return celsius \
+        if target_unit == 'C' \
+        else kelvin_to_fahrenheit(celsius)
 
 
 def extract_request_data(request):
