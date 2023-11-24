@@ -4,6 +4,9 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .header {
@@ -18,15 +21,18 @@ h1 {
 }
 
 .main-container {
-    width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin-top: 20px;
 }
 
 section {
+    width: 45%; /* Adjust as needed */
     padding: 20px;
     border: 1px solid #ccc;
     margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .form-group {
@@ -61,10 +67,13 @@ section {
     margin-bottom: 10px;
 }
 
-.forecast {
-    width: 400px;
-    float: left;
-    margin-right: 20px;
+.forecast,
+.weather_news {
+    width: 100%; /* Adjust as needed */
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .forecast table {
@@ -81,7 +90,14 @@ section {
     text-align: center;
 }
 
-.weather_news {
-    width: 400px;
-    float: right;
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }
