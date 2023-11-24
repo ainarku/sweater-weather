@@ -1,101 +1,103 @@
+/* static/style.css */
+
 body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .header {
-  background-color: #212529;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
+    background-color: #212529;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
 }
 
 h1 {
-  font-size: 2em;
+    font-size: 2em;
 }
 
 .main-container {
-  display: flex;
-  justify-content: space-around;
-  width: 80%;
-  margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin-top: 20px;
 }
 
 section {
-  width: 45%; /* Adjust as needed */
-  padding: 20px;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-  box-sizing: border-box;
+    width: 45%; /* Adjust as needed */
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .form-group {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .form-control {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
 }
 
 .btn {
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-primary {
-  background-color: #007bff;
-  color: #fff;
+    background-color: #007bff;
+    color: #fff;
 }
 
 .weather-details {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .location,
 .temperature,
 .condition,
 .humidity {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .forecast,
 .weather_news {
-  width: 100%; /* Adjust as needed */
-  padding: 20px;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-  box-sizing: border-box;
+    width: 100%; /* Adjust as needed */
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .forecast table {
-  width: 100%;
-  table-layout: fixed;
+    width: 100%;
+    table-layout: fixed;
 }
 
 .forecast table th,
 .forecast table td {
-  padding: 10px;
+    padding: 10px;
 }
 
 .forecast table th:first-child {
-  text-align: center;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
-  .main-container {
-    flex-direction: column;
-    align-items: center;
-  }
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
 
-  section {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+    section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }
