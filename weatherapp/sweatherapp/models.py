@@ -41,7 +41,7 @@ class WeatherData(models.Model):
     feels_like = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        blank=False,
+        blank=True,
         null=True
     )
     weather_description = models.TextField(
@@ -132,28 +132,6 @@ class ForecastData(models.Model):
         return f"{self.humidity} %"
 
 
-class News(models.Model):
-    title = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False
-    )
-    content = models.TextField(
-        blank=False,
-        null=False
-    )
-    image = models.ImageField(
-        blank=True,
-        null=True
-    )
-
-    class Meta:
-        ordering = ["-id"]
-
-    def __str__(self):
-        return self.title
-
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
@@ -200,12 +178,3 @@ class FavouriteCity(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s favorite city: {self.city_name}"
-
-
-class WeatherNews(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    image = models.ImageField(upload_to='weather_news_images/', blank=True, null=True)
-
-    def __str__(self):
-        return self.title
