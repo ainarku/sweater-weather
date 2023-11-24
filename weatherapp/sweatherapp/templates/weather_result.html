@@ -24,7 +24,7 @@
 <body>
 <h1>Current weather in {{ current_weather.city_name }}</h1>
 
-<p>Temperature: {{ current_weather.temperature|floatformat:0 }} °{{ temperature_unit }}</p>
+<p>Temperature: {{ temperature|floatformat:0 }} °{{ temperature_unit }}</p>
 <p>Feels Like: {{ current_weather.feels_like|floatformat:0 }} °{{ temperature_unit }}</p>
 <p>Weather Description: {{ current_weather.weather_description }}</p>
 <p>Humidity: {{ current_weather.humidity }} %</p>

@@ -2,73 +2,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sweather-Weather</title>
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweather-Weather</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-  <header class="header">
+<header class="header">
     <h1>Sweather-Weather</h1>
-  </header>
+</header>
 
-  <main class="main-container">
+<main class="main-container">
     <section class="weather-info">
-      <form method="post" action="{% url 'fetch_weather' %}">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="city">Enter City:</label>
-          <input type="text" id="city" name="city" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="temperature_unit">Select Units:</label>
-          <select id="temperature_unit" name="temperature_unit" class="form-control">
-            <option value="C">Celsius</option>
-            <option value="F">Fahrenheit</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Get Weather</button>
-      </form>
+        <form method="post" action="{% url 'fetch_weather' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="city">Enter City:</label>
+                <input type="text" id="city" name="city" class="form-control" value="{{ default_city }}" required>
+            </div>
+            <div class="form-group">
+                <label for="temperature_unit">Select Units:</label>
+                <select id="temperature_unit" name="temperature_unit" class="form-control">
+                    <option value="C">Celsius</option>
+                    <option value="F">Fahrenheit</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Weather</button>
+        </form>
 
-      {% if weather_data %}
-        <div class="weather-details">
-          <h2>Current Weather</h2>
-          <p class="location">Location: {{ weather_data.city_name }}</p>
-          <p class="temperature">Temperature: {{ weather_data.temperature }}°{{ weather_data.temperature_unit }}</p>
-          <p class="condition">Condition: {{ weather_data.weather_description }}</p>
-          <p class="humidity">Humidity: {{ weather_data.humidity }} %</p>
-        </div>
-      {% endif %}
+        {% if weather_data %}
+            <div class="weather-details">
+                <h2>Current Weather</h2>
+                <p class="location">Location: {{ default_city }}</p>
+                <p class="temperature">
+                    Temperature: {{ weather_data.temperature|floatformat:0 }}°{{ weather_data.temperature_unit }}</p>
+                <p class="feels_like">Feels like: {{ weather_data.feels_like|floatformat:0 }} °{{ temperature_unit }}</p>
+                <p class="condition">Weather Description: {{ weather_data.weather_description }}</p>
+                <p class="humidity">Humidity: {{ weather_data.humidity }} %</p>
+            </div>
+        {% endif %}
     </section>
 
     <section class="forecast">
-      <h2>5-Day Forecast</h2>
-      {% if forecast %}
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Temperature</th>
-              <th>Condition</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for day_forecast in forecast %}
-              <tr>
-                <td>{{ day_forecast.date_time|date:"Y-m-d" }}</td>
-                <td>{{ day_forecast.temperature }}°{{ day_forecast.temperature_unit }}</td>
-                <td>{{ day_forecast.weather_description }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
+        <h2>5-Day Forecast</h2>
+        {% if forecast %}
+            <table>
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Temperature</th>
+                    <th>Weather Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for day_forecast in forecast %}
+                    <tr>
+                        <td>{{ day_forecast.date_time|date:"Y-m-d" }}</td>
+                        <td>{{ day_forecast.temperature|floatformat:0 }}°{{ day_forecast.temperature_unit }}</td>
+                        <td>{{ day_forecast.weather_description }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </section>
-  </main>
-
-  <section class="weather_news">
-    <h2>Latest News</h2>
-    <p>Here are the news ...</p>
-  </section>
+</main>
 </body>
 </html>
