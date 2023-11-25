@@ -5,6 +5,7 @@ from .utils import process_weather_data
 from .utils import process_forecast_data
 from .utils import kelvin_to_celsius, kelvin_to_fahrenheit, fahrenheit_to_celsius
 from .utils import extract_request_data
+
 class TestApiRequest(TestCase):
     @patch('requests.get')
     def test_api_request_valid_response(self, mock_requests_get):
