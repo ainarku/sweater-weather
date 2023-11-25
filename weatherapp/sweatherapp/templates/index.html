@@ -35,7 +35,7 @@
                 <h2>Current Weather</h2>
                 <p class="location">Location: {{ default_city }}</p>
                 <p class="temperature">
-                    Temperature: {{ weather_data.temperature|floatformat:0 }}°{{ temperature_unit }}</p>
+                    Temperature: {{ weather_data.temperature|floatformat:0 }} °{{ temperature_unit }}</p>
                 <p class="feels_like">Feels like: {{ weather_data.feels_like|floatformat:0 }}
                     °{{ temperature_unit }}</p>
                 <p class="condition">Description: {{ weather_data.weather_description }}</p>
@@ -52,7 +52,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Temperature</th>
-                    <th>Weather Description</th>
+                    <th>Description</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,7 +60,7 @@
                     {% if forloop.counter <= 5 %}
                         <tr>
                             <td>{{ day_forecast.date_time|date:"Y-m-d" }}</td>
-                            <td>{{ day_forecast.temperature|floatformat:0 }}°{{ temperature_unit }}</td>
+                            <td>{{ day_forecast.temperature|floatformat:0 }} °{{ temperature_unit }}</td>
                             <td>{{ day_forecast.weather_description }}</td>
                         </tr>
                     {% endif %}

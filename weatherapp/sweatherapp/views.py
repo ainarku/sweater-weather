@@ -4,12 +4,7 @@ from .utils import extract_request_data, get_weather_data
 
 def process_weather_view(request, template_name='weather_result.html'):
     city, temperature_unit = extract_request_data(request)
-    context = {
-        'temperature': 0,
-        'current_weather': "Current weather not available at the moment",
-        'forecast_data': "Forecast weather not available at the moment",
-        'temperature_unit': temperature_unit,
-    }
+    context = {}
 
     if city and temperature_unit:
         current_weather, forecast_data = get_weather_data(
