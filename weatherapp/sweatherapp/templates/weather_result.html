@@ -83,7 +83,7 @@
     <div class="current-weather">
         <p>Temperature: {{ current_weather.temperature|floatformat:0 }} °{{ temperature_unit }}</p>
         <p>Feels Like: {{ current_weather.feels_like|floatformat:0 }} °{{ temperature_unit }}</p>
-        <p>Weather Description: {{ current_weather.weather_description }}</p>
+        <p>Description: {{ current_weather.weather_description }}</p>
         <p>Humidity: {{ current_weather.humidity }} %</p>
     </div>
 
@@ -100,7 +100,7 @@
                             <br>
                             Feels Like: {{ forecast.feels_like|floatformat:0 }} °{{ temperature_unit }}
                             <br>
-                            Weather Description: {{ forecast.weather_description }}
+                            Description: {{ forecast.weather_description }}
                             <br>
                             Humidity: {{ forecast.humidity }} %
                         </li>

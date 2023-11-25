@@ -11,8 +11,9 @@ load_dotenv()
 
 def api_request(city, endpoint, temperature_unit):
     api_key = os.getenv("OPENWEATHERMAP_API_KEY")
+
     if not api_key:
-        return HttpResponse("OpenWeatherMap API key not found.")
+        return HttpResponse("Weather data is currently unavailable. Please try again later.")
 
     url = f'https://api.openweathermap.org/data/2.5/{endpoint}?q={city}&appid={api_key}'
     response = requests.get(url)
@@ -25,7 +26,7 @@ def api_request(city, endpoint, temperature_unit):
         elif endpoint == "forecast":
             return process_forecast_data(data, temperature_unit)
 
-    return None
+    return HttpResponse(f"Error: Unable to fetch {endpoint} data for {city}. Please try again later.")
 
 
 def process_weather_data(data, temperature_unit):
@@ -74,8 +75,6 @@ def process_forecast_data(data, temperature_unit):
                 'weather_description': forecast.get('weather', [{}])[0].get(
                     'description', 'No Description'),
                 'humidity': (main_data.get('humidity', 0)),
-                'temp_min': convert_temperature(main_data.get('temp_min', 0), temperature_unit),
-                'temp_max': convert_temperature(main_data.get('temp_max', 0), temperature_unit),
             }
             forecast_list.append(forecast_instance)
 
