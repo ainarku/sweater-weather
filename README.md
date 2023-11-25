@@ -51,7 +51,7 @@ Enter the desired location in the search bar.
 Click the "Get Weather" button to retrieve the current weather information.
 You can use "Go back" button to start again and search a new location
 
-### See the preview here:
+### See the demo here:
 
 ![](img/Front_page.png)
 ![](img/search_result_page.png)
