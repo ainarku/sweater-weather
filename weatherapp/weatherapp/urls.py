@@ -22,5 +22,5 @@ from sweatherapp.views import process_weather_view, index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path('weather/', process_weather_view, name='fetch_weather'),
+    path('weather/', process_weather_view, name='weather'),
 ]

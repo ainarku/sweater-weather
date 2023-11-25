@@ -26,11 +26,7 @@ def process_weather_view(request, template_name='weather_result.html'):
     return render(request, template_name, context)
 
 
-def fetch_weather(request):
-    return process_weather_view(request, 'weather_result.html')
-
-
-def search_weather(request):
+def weather(request):
     return process_weather_view(request, 'weather_result.html')
 
 
