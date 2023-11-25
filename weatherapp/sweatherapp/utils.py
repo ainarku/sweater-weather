@@ -47,10 +47,22 @@ def process_weather_data(data, temperature_unit):
 def process_forecast_data(data, temperature_unit):
     forecast_list = []
 
+    dates_set = set()
+
     for forecast in data.get('list', []):
         forecast_datetime = datetime.fromtimestamp(forecast.get('dt', 0))
         forecast_datetime_aware = timezone.make_aware(
             forecast_datetime, timezone=timezone.utc)
+
+        date_str = forecast_datetime_aware.strftime('%Y-%m-%d')
+
+        if date_str in dates_set:
+            continue
+
+        dates_set.add(date_str)
+
+        if forecast_datetime.date() == datetime.now().date():
+            continue
 
         main_data = forecast.get('main', {})
 
@@ -62,6 +74,8 @@ def process_forecast_data(data, temperature_unit):
                 'weather_description': forecast.get('weather', [{}])[0].get(
                     'description', 'No Description'),
                 'humidity': (main_data.get('humidity', 0)),
+                'temp_min': convert_temperature(main_data.get('temp_min', 0), temperature_unit),
+                'temp_max': convert_temperature(main_data.get('temp_max', 0), temperature_unit),
             }
             forecast_list.append(forecast_instance)
 
