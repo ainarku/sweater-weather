@@ -72,7 +72,7 @@ def convert_temperature(kelvin, target_unit):
     celsius = kelvin_to_celsius(kelvin)
     return celsius \
         if target_unit == 'C' \
-        else kelvin_to_fahrenheit(celsius)
+        else kelvin_to_fahrenheit(kelvin)
 
 
 def extract_request_data(request):
@@ -96,3 +96,7 @@ def kelvin_to_celsius(kelvin):
 
 def kelvin_to_fahrenheit(kelvin):
     return (kelvin - 273.15) * 9 / 5 + 32
+
+
+def fahrenheit_to_celsius(fahrenheit):
+    return (fahrenheit - 32) * 5 / 9
