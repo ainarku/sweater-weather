@@ -45,7 +45,7 @@ def index(request):
         'default_city': default_city,
         'weather_data': current_weather,
         'forecast': forecast_data,
+        'temperature_unit': temperature_unit
     }
 
     return render(request, 'index.html', context)
-  
