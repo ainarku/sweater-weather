@@ -45,7 +45,7 @@
     </section>
 
     <section class="forecast">
-        <h2>5-Day Forecast</h2>
+        <h2>5-Day Forecast for Tallinn</h2>
         {% if forecast %}
             <table>
                 <thead>
@@ -57,16 +57,22 @@
                 </thead>
                 <tbody>
                 {% for day_forecast in forecast %}
-                    <tr>
-                        <td>{{ day_forecast.date_time|date:"Y-m-d" }}</td>
-                        <td>{{ day_forecast.temperature|floatformat:0 }}°{{ day_forecast.temperature_unit }}</td>
-                        <td>{{ day_forecast.weather_description }}</td>
-                    </tr>
+                    {% if forloop.counter <= 5 %}
+                        <tr>
+                            <td>{{ day_forecast.date_time|date:"Y-m-d" }}</td>
+                            <td>{{ day_forecast.temperature|floatformat:0 }}°{{ day_forecast.temperature_unit }}</td>
+                            <td>{{ day_forecast.weather_description }}</td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
         {% endif %}
     </section>
 </main>
+
+    <footer>
+        <p>&copy; 2023 Sweather-Weather. All rights reserved.</p>
+    </footer>
 </body>
 </html>
