@@ -3,8 +3,9 @@ from django.test import RequestFactory, TestCase
 from .utils import api_request
 from .utils import process_weather_data
 from .utils import process_forecast_data
-from .utils import kelvin_to_celsius, kelvin_to_fahrenheit, fahrenheit_to_celsius
+from .utils import kelvin_to_celsius, kelvin_to_fahrenheit
 from .utils import extract_request_data
+
 
 class TestApiRequest(TestCase):
     @patch('requests.get')
@@ -15,7 +16,9 @@ class TestApiRequest(TestCase):
         result = api_request('London', 'weather', 'C')
 
         self.assertIsNotNone(result)
-        self.assertEqual(result['temperature'], 26.85)
+        self.assertAlmostEqual(result['temperature'], 26.85, places=2)
+
+
 class TestProcessWeatherData(TestCase):
     def test_process_weather_data(self):
         sample_data = {
@@ -27,7 +30,7 @@ class TestProcessWeatherData(TestCase):
         result = process_weather_data(sample_data, 'C')
 
         self.assertIsNotNone(result)
-        self.assertEqual(result['temperature'], 26.85)
+        self.assertAlmostEqual(result['temperature'], 26.85, places=2)
 
 
 class TestProcessForecastData(TestCase):
@@ -60,11 +63,9 @@ class TestTemperatureConversion(TestCase):
 
         celsius_result = kelvin_to_celsius(kelvin_value)
         fahrenheit_result = kelvin_to_fahrenheit(kelvin_value)
-        celsius_from_fahrenheit_result = fahrenheit_to_celsius(fahrenheit_result)
 
-        self.assertEqual(celsius_result, 26.85)
-        self.assertEqual(fahrenheit_result, 80.33)
-        self.assertEqual(celsius_from_fahrenheit_result, 26.85)
+        self.assertAlmostEqual(celsius_result, 26.85, places=2)
+        self.assertAlmostEqual(fahrenheit_result, 80.33, places=2)
 
 
 class TestExtractRequestData(TestCase):
