@@ -14,7 +14,7 @@
 
 <main class="main-container">
     <section class="weather-info">
-        <form method="post" action="{% url 'fetch_weather' %}">
+        <form method="post" action="{% url 'weather' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="city">Enter City:</label>

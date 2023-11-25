@@ -94,7 +94,7 @@
                 {% for forecast in forecast_data %}
                     {% if forloop.counter <= 5 %}
                         <li>
-                            <strong>{{ forecast.date_time|date:"Y-m-d H:i:s" }}</strong>
+                            <strong>{{ forecast.date_time|date:"Y-m-d" }}</strong>
                             <br>
                             Temperature: {{ forecast.temperature|floatformat:0 }} °{{ temperature_unit }}
                             <br>
