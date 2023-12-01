@@ -1,0 +1,103 @@
+/* static/weather_result_styles.css */
+
+body {
+    background-image: url('../static/clouds.jpg');
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: #3d6dd9; /* Match the background color from styles.css */
+    color: #333; /* Set text color to black to match styles.css */
+}
+
+h1 {
+    font-size: 2em;
+    color: #2f2f9d; /* Match the color from styles.css */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.current-weather,
+.forecast {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background-color: #3d6dd9;
+    color: #000; /* Set text color to black for both current-weather and forecast */
+}
+
+.condition img,
+.description img {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.condition,
+.description {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.current-weather p:not(:last-child),
+.forecast li:not(:last-child) p,
+.forecast li:not(:last-child) .condition,
+.forecast-details p:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.current-weather .condition p:last-child,
+.forecast-details p:last-child {
+    margin-bottom: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Reset margin for the list */
+}
+
+li {
+    margin-bottom: 20px;
+}
+
+strong {
+    color: #007bff;
+}
+
+/* Updated the back button styles */
+.back-button {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Additional styles for the date */
+.date,
+.forecast strong {
+    color: #000; /* Set the date text color to black */
+    font-weight: bold;
+}
