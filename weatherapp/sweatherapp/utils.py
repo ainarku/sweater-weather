@@ -31,6 +31,7 @@ def api_request(city, endpoint, temperature_unit):
 
 def process_weather_data(data, temperature_unit):
     main_data = data.get('main', {})
+    weather_info = data.get('weather', [{}])[0]
 
     temperature = convert_temperature(main_data.get('temp', 0), temperature_unit)
     feels_like = convert_temperature(main_data.get('feels_like', 0), temperature_unit)
@@ -41,6 +42,7 @@ def process_weather_data(data, temperature_unit):
         'feels_like': feels_like,
         'weather_description': data.get('weather', [{}])[0].get(
             'description', 'No Description'),
+        'weather_icon': weather_info.get('icon', ''),
         'humidity': (main_data.get('humidity', 0)),
     }
 
@@ -66,15 +68,16 @@ def process_forecast_data(data, temperature_unit):
             continue
 
         main_data = forecast.get('main', {})
+        weather_data = forecast.get('weather', [{}])[0]
 
-        if main_data:
+        if main_data and weather_data:
             forecast_instance = {
                 'date_time': forecast_datetime_aware,
                 'temperature': convert_temperature(main_data.get('temp', 0), temperature_unit),
                 'feels_like': convert_temperature(main_data.get('feels_like', 0), temperature_unit),
-                'weather_description': forecast.get('weather', [{}])[0].get(
-                    'description', 'No Description'),
-                'humidity': (main_data.get('humidity', 0)),
+                'weather_description': weather_data.get('description', 'No Description'),
+                'weather_icon': weather_data.get('icon', '01d'),  # Assuming '01d' as a default icon code
+                'humidity': main_data.get('humidity', 0),
             }
             forecast_list.append(forecast_instance)
 

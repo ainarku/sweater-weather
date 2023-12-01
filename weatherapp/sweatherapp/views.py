@@ -21,10 +21,6 @@ def process_weather_view(request, template_name='weather_result.html'):
     return render(request, template_name, context)
 
 
-def weather(request):
-    return process_weather_view(request, 'weather_result.html')
-
-
 def index(request):
     default_city = 'Tallinn'
     temperature_unit = 'C'
