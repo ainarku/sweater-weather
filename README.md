@@ -1,6 +1,6 @@
 # Django Weather Application
 
-This weather application, built using Django, requests, and OpenWeatherMap API, allows users to access weather
+This is a weather application, built using Django, requests and OpenWeatherMap API. It allows users to access weather
 information by default for the city of Tallinn or by entering a specific city name.
 
 ## Framework
