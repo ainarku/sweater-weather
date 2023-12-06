@@ -41,7 +41,7 @@ The current version of the template is based on:
 4. Install the required dependencies:
 
    ```bash
-   pip install -r weatherapp/requirements.txt
+   pip install -r requirements.txt
 
 5. Set up your OpenWeatherMap API key and Database Credentials:
 
