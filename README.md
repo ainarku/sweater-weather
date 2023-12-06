@@ -36,7 +36,8 @@ The current version of the template is based on:
 
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
+   source venv/bin/activate  # On Unix or MacOS
+   venv/Scripts/activate     # On Windows
 
 4. Install the required dependencies:
 
