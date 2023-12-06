@@ -73,7 +73,7 @@ The current version of the template is based on:
 
 ## Usage
 
-- Enter the desired location in the search bar.
+- Enter the desired location in the `Enter City` search bar.
 - Click the `Get Weather` button to retrieve the current weather information.
 - Use the `Go back` button to start again and search for a new location.
 
